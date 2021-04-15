@@ -4,12 +4,12 @@ import com.company.springredditclone.dto.SubredditDTO;
 import com.company.springredditclone.dto.SubredditDTO.SubredditDTOBuilder;
 import com.company.springredditclone.model.Subreddit;
 import com.company.springredditclone.model.Subreddit.SubredditBuilder;
-import javax.annotation.processing.Generated;
+import javax.annotation.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2021-04-15T08:50:53+0700",
+    date = "2021-04-15T11:48:51+0700",
     comments = "version: 1.3.1.Final, compiler: javac, environment: Java 15.0.2 (Oracle Corporation)"
 )
 @Component

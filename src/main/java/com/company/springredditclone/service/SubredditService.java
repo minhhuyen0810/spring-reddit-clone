@@ -1,6 +1,8 @@
 package com.company.springredditclone.service;
 
 import com.company.springredditclone.dto.SubredditDTO;
+import com.company.springredditclone.exception.SpringRedditException;
+import com.company.springredditclone.mapper.SubredditMapper;
 import com.company.springredditclone.model.Subreddit;
 import com.company.springredditclone.repository.SubredditRepository;
 import lombok.AllArgsConstructor;
@@ -17,34 +19,31 @@ import java.util.stream.Collectors;
 @Slf4j
 public class SubredditService {
     private final SubredditRepository subredditRepository;
+    private final SubredditMapper subredditMapper;
 
     @Transactional
-    public SubredditDTO save(SubredditDTO subredditDTO){
-        Subreddit subreddit = mapSubredditDto(subredditDTO);
-        Subreddit save = subredditRepository.save(subreddit);
+    public SubredditDTO save(SubredditDTO subredditDTO) {
+
+        Subreddit save = subredditRepository.save(subredditMapper.mapDtoToSubreddit(subredditDTO));
         subredditDTO.setId(save.getId());
         return subredditDTO;
     }
 
-    private Subreddit mapSubredditDto(SubredditDTO subredditDTO) {
-       return Subreddit.builder().name(subredditDTO.getName())
-                .description(subredditDTO.getDescription())
-                .build();
-    }
+
     @Transactional(readOnly = true)
-    public List<SubredditDTO> getAll(){
-    return subredditRepository.findAll()
+    public List<SubredditDTO> getAll() {
+        return subredditRepository.findAll()
                 .stream()
-                .map(this::mapToDto)
+                .map(subredditMapper::mapSubredditToDto)
                 .collect(Collectors.toList());
 
     }
 
-    private SubredditDTO mapToDto(Subreddit subreddit) {
-        return SubredditDTO.builder()
-                .name(subreddit.getName())
-                .id(subreddit.getId())
-                .numberOfPosts(subreddit.getPosts().size())
-                .build();
+    public SubredditDTO getSubreddit(Long id) throws SpringRedditException {
+        Subreddit subreddit = subredditRepository.findById(id)
+                .orElseThrow(() -> new SpringRedditException("No subreddit found with ID - " + id));
+        return subredditMapper.mapSubredditToDto(subreddit);
     }
 }
+
+
