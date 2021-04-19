@@ -14,6 +14,7 @@ public class Vote {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long voteId;
+    private VoteType voteType;
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="postId", referencedColumnName = "postId")

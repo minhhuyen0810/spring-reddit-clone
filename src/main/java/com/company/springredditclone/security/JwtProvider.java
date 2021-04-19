@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.*;
 import java.security.cert.CertificateException;
+import java.sql.Date;
+import java.time.Instant;
 
 import static io.jsonwebtoken.Jwts.parser;
 
@@ -39,6 +41,15 @@ public class JwtProvider {
         return Jwts.builder()
                 .setSubject(pricipal.getUsername())
                 .signWith(getPrivateKey())
+                .setExpiration(Date.from(Instant.now().plusMillis(jwtExpirationInMillis)))
+                .compact();
+    }
+    public String generateTokenWithUserName(String username) throws SpringRedditException {
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(java.util.Date.from(Instant.now()))
+                .signWith(getPrivateKey())
+                .setExpiration(Date.from(Instant.now()))
                 .compact();
     }
     private PrivateKey getPrivateKey() throws SpringRedditException {

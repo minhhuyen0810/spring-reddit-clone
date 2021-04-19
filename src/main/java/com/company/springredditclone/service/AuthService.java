@@ -3,6 +3,7 @@ package com.company.springredditclone.service;
 
 import com.company.springredditclone.dto.AuthenticationRespone;
 import com.company.springredditclone.dto.LoginRequest;
+import com.company.springredditclone.dto.RefreshTokenRequest;
 import com.company.springredditclone.dto.RegisterRequest;
 import com.company.springredditclone.exception.SpringRedditException;
 import com.company.springredditclone.model.NotificationEmail;
@@ -106,6 +107,17 @@ public class AuthService {
                 getContext().getAuthentication().getPrincipal();
         return userRepository.findByUsername(principal.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getUsername()));
+    }
+
+    public AuthenticationRespone refreshToken(RefreshTokenRequest refreshTokenRequest) throws SpringRedditException {
+        refeshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
+        String token = jwtProvider.generateTokenWithUserName(refreshTokenRequest.getUsername());
+        return  AuthenticationRespone.builder()
+                .authenticationToken(token)
+                .refreshToken(refreshTokenRequest.getRefreshToken())
+                .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()))
+                .username(refreshTokenRequest.getUsername())
+                .build();
     }
 
 
