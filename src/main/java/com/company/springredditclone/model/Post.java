@@ -1,7 +1,8 @@
 package com.company.springredditclone.model;
 
-import com.sun.istack.Nullable;
+
 import lombok.*;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;

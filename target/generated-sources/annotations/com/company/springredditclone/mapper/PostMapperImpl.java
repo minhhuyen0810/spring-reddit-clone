@@ -3,7 +3,6 @@ package com.company.springredditclone.mapper;
 import com.company.springredditclone.dto.PostRequest;
 import com.company.springredditclone.dto.PostResponse;
 import com.company.springredditclone.model.Post;
-import com.company.springredditclone.model.Post.PostBuilder;
 import com.company.springredditclone.model.Subreddit;
 import com.company.springredditclone.model.User;
 import javax.annotation.Generated;
@@ -11,8 +10,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2021-04-16T11:46:23+0700",
-    comments = "version: 1.3.1.Final, compiler: javac, environment: Java 15.0.2 (Oracle Corporation)"
+    date = "2021-04-21T16:18:15+0700",
+    comments = "version: 1.4.1.Final, compiler: javac, environment: Java 15.0.2 (Oracle Corporation)"
 )
 @Component
 public class PostMapperImpl extends PostMapper {
@@ -23,23 +22,23 @@ public class PostMapperImpl extends PostMapper {
             return null;
         }
 
-        PostBuilder post = Post.builder();
+        Post post = new Post();
 
         if ( postRequest != null ) {
-            post.description( postRequest.getDescription() );
-            post.postId( postRequest.getPostId() );
-            post.postName( postRequest.getPostName() );
-            post.url( postRequest.getUrl() );
+            post.setDescription( postRequest.getDescription() );
+            post.setPostId( postRequest.getPostId() );
+            post.setPostName( postRequest.getPostName() );
+            post.setUrl( postRequest.getUrl() );
         }
         if ( subreddit != null ) {
-            post.subreddit( subreddit );
+            post.setSubreddit( subreddit );
         }
         if ( user != null ) {
-            post.user( user );
+            post.setUser( user );
         }
-        post.createdDate( java.time.Instant.now() );
+        post.setCreatedDate( java.time.Instant.now() );
 
-        return post.build();
+        return post;
     }
 
     @Override
@@ -50,30 +49,15 @@ public class PostMapperImpl extends PostMapper {
 
         PostResponse postResponse = new PostResponse();
 
+        postResponse.setId( post.getPostId() );
         postResponse.setPostName( post.getPostName() );
         postResponse.setDescription( post.getDescription() );
-        postResponse.setId( post.getPostId() );
-        postResponse.setUserName( postUserUsername( post ) );
         postResponse.setUrl( post.getUrl() );
         postResponse.setSubredditName( postSubredditName( post ) );
+        postResponse.setUserName( postUserUsername( post ) );
         postResponse.setVoteCount( post.getVoteCount() );
 
         return postResponse;
-    }
-
-    private String postUserUsername(Post post) {
-        if ( post == null ) {
-            return null;
-        }
-        User user = post.getUser();
-        if ( user == null ) {
-            return null;
-        }
-        String username = user.getUsername();
-        if ( username == null ) {
-            return null;
-        }
-        return username;
     }
 
     private String postSubredditName(Post post) {
@@ -89,5 +73,20 @@ public class PostMapperImpl extends PostMapper {
             return null;
         }
         return name;
+    }
+
+    private String postUserUsername(Post post) {
+        if ( post == null ) {
+            return null;
+        }
+        User user = post.getUser();
+        if ( user == null ) {
+            return null;
+        }
+        String username = user.getUsername();
+        if ( username == null ) {
+            return null;
+        }
+        return username;
     }
 }
