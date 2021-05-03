@@ -40,7 +40,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final VerificationTokenRepository verificationTokenRepository;
     private final MailService mailService;
-    private final MailContentBuilder mailContentBuilder;
+
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
     private final RefeshTokenService refeshTokenService;

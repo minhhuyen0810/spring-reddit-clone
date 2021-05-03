@@ -1,6 +1,7 @@
 package com.company.springredditclone.controller;
 
 import com.company.springredditclone.dto.SubredditDTO;
+import com.company.springredditclone.exception.SpringRedditException;
 import com.company.springredditclone.service.SubredditService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,18 @@ public class SubredditController {
                 .status(HttpStatus.OK)
                 .body(subredditService.getAll());
 
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<SubredditDTO> getSubreddit(@PathVariable(value = "id") Long id) throws SpringRedditException {
+        return ResponseEntity.status(HttpStatus.OK).body(subredditService.getSubreddit(id));
+    }
+
+    @PostMapping("/check-subreddit")
+    public ResponseEntity<String> checkSubreddit(@RequestBody SubredditDTO subredditDTO){
+        if(!subredditService.checkSubredditByName(subredditDTO.getName())){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Subreddit already exists");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body("Ok");
     }
 
 }
